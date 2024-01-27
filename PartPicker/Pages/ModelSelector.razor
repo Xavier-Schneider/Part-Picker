@@ -1,0 +1,91 @@
+﻿@page "/"
+@inject NavigationManager Navigation
+@inject StateService.StateContainerService stateService;
+
+<PageTitle>Select Vehicle</PageTitle>
+
+<div style="height:100%; overflow-y:auto; overflow-x:hidden;">
+    <MudText Typo="Typo.h3" Align="Align.Left">Select Vehicle</MudText>
+    <MudText Typo="Typo.body1" Align="Align.Left">Narrow search by specifying make, model, year and trim below. Click on vehicle image to select parts.</MudText>
+    <div class="d-flex flex-grow-1 gap-4" style="max-width:800px; margin-top:20px;">
+        
+        <MudSelect T="string" @bind-Value="stateService.filter.make" Disabled="@MakesEmpty()" Label="Select Make" AnchorOrigin="Origin.BottomCenter">
+            @foreach (String make in stateService.filter.makes)
+            {
+                <MudSelectItem Value="@(make)" />
+            }
+        </MudSelect>
+
+        <MudSelect T="string" @bind-Value="stateService.filter.model" Disabled="@ModelsEmpty()" Label="Select Model" AnchorOrigin="Origin.BottomCenter">
+            @foreach (String model in stateService.filter.models)
+            {
+                <MudSelectItem Value="@(model)" />
+            }
+        </MudSelect>
+
+        <MudSelect T="string" @bind-Value="stateService.filter.year" Disabled="@YearsEmpty()" Label="Select Year" AnchorOrigin="Origin.BottomCenter">
+            @foreach (String year in stateService.filter.years)
+            {
+                <MudSelectItem Value="@(year)" />
+            }
+        </MudSelect>
+
+        <MudSelect T="string" @bind-Value="stateService.filter.trim" Disabled="@TrimsEmpty()" Label="Select Trim" AnchorOrigin="Origin.BottomCenter">
+            @foreach (String trim in stateService.filter.trims)
+            {
+                <MudSelectItem Value="@(trim)" />
+            }
+        </MudSelect>
+        <MudButton OnClick="() => stateService.filter.clear()" Disabled="@FilterEmpty()" Variant="Variant.Filled">Clear</MudButton>
+    </div>
+
+    <MudGrid Style="margin-top: 20px;" Spacing="5" Justify="Justify.Center">
+        @foreach (Vehicle vehicle in stateService.filter.filteredList)
+        {
+            <MudItem>
+                <MudButton OnClick="() => ClickedOnVehiclePicture(vehicle)">
+                    <div>
+                        <MudText>
+                            @vehicle.ToString()
+                        </MudText>
+                        <MudImage Src=@vehicle.PictureURL Width="250" Class="rounded-2" Elevation="5" />
+                    </div>
+                </MudButton>
+            </MudItem>
+        }
+    </MudGrid>
+</div>
+
+
+@code {
+    public void ClickedOnVehiclePicture(Vehicle clickedVehicle)
+    {
+        stateService.filter.setFilters(clickedVehicle.getMake(), clickedVehicle.getModel(), clickedVehicle.getYear(), clickedVehicle.getTrim());
+        Navigation.NavigateTo("/PartSelector");
+    }
+
+    public bool MakesEmpty()
+    {
+        return !stateService.filter.makes.Any();
+    }
+
+    public bool ModelsEmpty()
+    {
+        return !stateService.filter.models.Any();
+    }
+
+    public bool YearsEmpty()
+    {
+        return !stateService.filter.years.Any();
+    }
+
+    public bool TrimsEmpty()
+    {
+        return !stateService.filter.trims.Any();
+    }
+
+    public bool FilterEmpty()
+    {
+        return stateService.filter.filterEmpty();
+    }
+}

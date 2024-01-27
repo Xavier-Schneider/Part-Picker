@@ -1,0 +1,31 @@
+﻿@page "/AccountInfo"
+@inject NavigationManager Navigation
+@inject StateService.StateContainerService stateService;
+
+<style>
+    .addrField {
+        display: inline-block;
+        width: 200px;
+    }
+
+</style>
+
+<PageTitle>User Profile</PageTitle>
+
+<MudPaper Style="margin-left: 30px; margin-top: 30px;" Elevation="0">
+    <MudText Typo="Typo.h3">User Profile</MudText>
+
+    <MudImage Src="Assets/James Bond.jpg" Elevation="5" Height="250" Class="rounded-1" Style="margin-top: 20px; margin-bottom: 20px;"/>
+
+    <MudText Typo="Typo.body1">
+        <p><span class="addrField">Name:</span>Bond, James Bond</p>
+        <p><span class="addrField">Street address:</span>4 Privet Drive</p>
+        <p><span class="addrField">City:</span>Little Whinging</p>
+        <p><span class="addrField">County:</span>Surrey, UK</p>
+    </MudText>
+</MudPaper>
+
+
+@code {
+
+}

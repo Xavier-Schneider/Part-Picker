@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>PartPicker</title>
+    <base href="/" />
+    <link href="css/bootstrap/bootstrap.min.css" rel="stylesheet" />
+    <link href="css/app.css" rel="stylesheet" />
+    <link href="PartPicker.styles.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
+    <link href="_content/MudBlazor/MudBlazor.min.css" rel="stylesheet" />
+
+    <style>
+        model-viewer {
+            width: 80vw;
+            height: 80vh;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <div style="height: 700px; display: flex; align-items: center; justify-content: center;">
+            <div>
+                <img style="width:500px; display:block;" src="Assets/PartPicker_StartScreen.svg" />
+                <br />
+                <h2 style="display: block; text-align:center; margin-top:20px;">Loading...</h2>
+            </div>
+        </div>
+    </div>
+
+    <div id="blazor-error-ui">
+        An unhandled error has occurred.
+        <a href="" class="reload">Reload</a>
+        <a class="dismiss">🗙</a>
+    </div>
+    <script src="_framework/blazor.webassembly.js"></script>
+    <script src="_content/MudBlazor/MudBlazor.min.js"></script>
+    <script type="module" src="model-viewer.js"></script>
+</body>
+
+</html>

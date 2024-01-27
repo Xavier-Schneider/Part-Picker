@@ -1,0 +1,91 @@
+﻿@page "/PartSelector"
+@inject NavigationManager Navigation
+@inject StateService.StateContainerService stateService;
+
+<style>
+    .HotspotAnnotation {
+        background-color: white;
+        border: solid 1px darkslategray;
+        border-radius: 10px;
+        padding: 10px;
+    }
+</style>
+
+
+<PageTitle>Select Parts</PageTitle>
+
+<div class="d-flex flex-grow-1 gap-4" style="height: 100%;">
+    <MudPaper Class="flex-none py-4" Width="300px" Elevation="5">
+        <div style="height:100%; overflow-x:hidden; overflow-y:auto;">
+            <MudText Typo="Typo.body2" Style="margin: 0px 15px 15px 15px;">
+                Click part name to select. Click down arrow to expand.
+                Left mouse button to rotate image, right button to drag, wheel to scale.
+            </MudText>
+            <MudTreeView Items="Cars" Hover="true">
+                <ItemTemplate>
+                    <MudTreeViewItem @bind-Expanded="@context.expand"
+                                     @onclick="@context.isolate"
+                                     Items="@context.subParts"
+                                     Text="@context.partName"
+                                     Icon="@(context.expanded ? Icons.Custom.Uncategorized.FolderOpen : Icons.Custom.Uncategorized.Folder)" />
+                </ItemTemplate>
+            </MudTreeView>
+        </div>
+    </MudPaper>
+
+    <MudPaper Class="flex-auto" Elevation="5" Style="padding:10px;">
+        <model-viewer style="width:100%; height:100%; margin:0;" src="@stateService.genericCar.selectedPart.currentURL" exposure="0.4" poster="Assets/PartPicker_Loading.svg" camera-controls>
+        </model-viewer>
+
+        @if (stateService.genericCar.selectedPart.purchasable && stateService.genericCar.selectedPart.isolated)
+        {
+            if (newItem == null || newItem.Part != stateService.genericCar.selectedPart)
+                newItem = new CartItem(stateService.genericCar.selectedPart);
+            int quantity = stateService.cart.getQuantity(newItem);
+
+            <MudCard Elevation="5" Style="position: absolute; bottom:30px; right: 30px; width:200px;">
+
+                <MudCardContent Class="justify-center">
+                    <MudText Align="Align.Center">
+                        @stateService.genericCar.selectedPart.partName
+                        @stateService.genericCar.selectedPart.price.ToString("C")
+                    </MudText>
+                </MudCardContent>
+
+                <MudCardActions Class="justify-center">
+                    <MudIconButton Icon="@Icons.Filled.RemoveCircleOutline" OnClick="() => newItem.decrementQuantity()" />
+                    @newItem.Quantity
+                    <MudIconButton Icon="@Icons.Filled.AddCircleOutline" OnClick="() => newItem.incrementQuantity()" />
+                </MudCardActions>
+
+                <MudCardActions Class="justify-center">
+                    <MudButton OnClick="AddToCart">Add to cart</MudButton>
+                </MudCardActions>
+
+                <MudCardContent Class="justify-center">
+                    <MudText Align="Align.Center">
+                        @quantity in cart
+                    </MudText>
+                </MudCardContent>
+
+            </MudCard>
+        }
+    </MudPaper>
+</div>
+
+@code {
+    private HashSet<Part> Cars { get; set; } = new HashSet<Part>();
+    public CartItem? newItem;
+
+    protected override void OnInitialized()
+    {
+        Cars.Add(stateService.genericCar);
+    }
+
+
+    public void AddToCart()
+    {
+        stateService.cart.Add(newItem);
+        newItem = null;
+    }
+}

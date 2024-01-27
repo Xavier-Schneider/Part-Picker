@@ -1,0 +1,96 @@
+﻿@page "/CheckoutPage"
+@inject NavigationManager Navigation
+@inject StateService.StateContainerService stateService;
+
+<PageTitle>CheckoutPage</PageTitle>
+<div style="height:100%; overflow-y:auto; overflow-x:hidden;">
+    @if (!OrderHasBeenPlaced)
+    {
+        @if (!stateService.cart.CartList.Any())
+        {
+            <MudText Typo="Typo.h5" Style="margin-top:20px;">Cart is empty, cannot check out</MudText>
+        }
+        else
+        {
+            <MudContainer Class="mt-16" MaxWidth="MaxWidth.Medium">
+                <MudText Typo="Typo.h3" Align="Align.Center" GutterBottom="true">Checkout</MudText>
+                <MudGrid Spacing="6" Class="mt-16">
+
+                    <MudItem xs="7">
+                        <MudText Typo="Typo.h5" GutterBottom="true">Shipping Information</MudText>
+                        <MudGrid>
+                            <MudItem xs="12">
+                                <MudTextField T="string" Label="Full name" />
+                            </MudItem>
+                            <MudItem xs="12">
+                                <MudTextField T="string" Label="Email" />
+                            </MudItem>
+                            <MudItem xs="12">
+                                <MudTextField T="string" Label="Phone number" />
+                            </MudItem>
+                            <MudItem xs="12">
+                                <MudTextField T="string" Label="Address" />
+                            </MudItem>
+                            <MudItem xs="6">
+                                <MudTextField T="string" Label="Postal code" />
+                            </MudItem>
+                        </MudGrid>
+
+                        <br />
+                        <br />
+
+                        <MudText Typo="Typo.h5" GutterBottom="true">Billing Information</MudText>
+                        <MudGrid>
+                            <MudItem xs="12">
+                                <MudTextField Mask="@(new PatternMask("0000 0000 0000 0000"))" T="string" Label="Card Number" />
+                            </MudItem>
+                            <MudItem xs="6">
+                                <MudTextField Mask="@(new DateMask("MM/YY", 'Y', 'M'))" T="string" Label="Expiry" />
+                            </MudItem>
+                            <MudItem xs="6">
+                                <MudTextField Mask="@(new PatternMask("000"))" T="string" Label="CVV" />
+                            </MudItem>
+                            <MudItem xs="12" Class="d-flex justify-center">
+                                <MudButton OnClick="PlaceOrder" Variant="Variant.Filled">Place order</MudButton>
+                            </MudItem>
+                        </MudGrid>
+                    </MudItem>
+                </MudGrid>
+            </MudContainer>
+        }
+    }
+    else // order has been placed
+    {
+        <div style="margin-top:30px; margin-left:30px;max-width:500px;">
+            <MudText Typo="Typo.h5">
+                Success!
+            </MudText>
+            <MudText Style="margin-top:10px;">
+                Order has been placed. You will received an emailed order confirmation shortly. Your card will not be charged
+                until the order is shipped.
+            </MudText>
+            <MudText Style="margin-top:10px;">
+                Thank you for shopping with Part Picker!
+            </MudText>
+            <MudButton Style="margin-top:30px;" OnClick="ContinueShopping" Variant="Variant.Filled">Continue shopping</MudButton>
+        </div>
+    }
+
+</div>
+
+
+@code {
+    private bool OrderHasBeenPlaced = false;
+
+    private void PlaceOrder()
+    {
+        OrderHasBeenPlaced = true;
+        stateService.cart.emptyCart();
+    }
+
+    private void ContinueShopping()
+    {
+        Navigation.NavigateTo("/");
+    }
+
+}

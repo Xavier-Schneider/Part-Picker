@@ -1,0 +1,55 @@
+﻿@inherits LayoutComponentBase
+@inject NavigationManager Navigation
+@inject StateService.StateContainerService stateService;
+
+<MudThemeProvider />
+<MudDialogProvider />
+<MudSnackbarProvider />
+
+<MudLayout>
+    <MudAppBar Style="background-color:lightgray;">
+        <MudButton Variant="Variant.Text" Href="/"><MudImage Src="Assets/PartPicker_Logo.svg" Width="300" /> </MudButton>
+
+        <MudSpacer />
+
+        <MudTooltip Text="Select vehicle" Placement="Placement.Bottom" Arrow="true">
+            <MudIconButton Icon="@Icons.Filled.DirectionsCar" Style="color: darkslategray" Href="/" />
+        </MudTooltip>
+
+        <MudTooltip Text="Select parts" Placement="Placement.Bottom" Arrow="true">
+            <MudIconButton Icon="@Icons.Filled.SettingsInputComponent" Disabled="@(!stateService.filter.filterFull())" Style="color: darkslategray" Href="/PartSelector" />
+        </MudTooltip>
+
+        <MudTooltip Text="User profile" Placement="Placement.Bottom" Arrow="true">
+            <MudIconButton Icon="@Icons.Filled.AccountCircle" Style="color: darkslategray" Href="/AccountInfo" />
+        </MudTooltip>
+
+        <MudTooltip Text="Cart" Placement="Placement.Bottom" Arrow="true">
+            <MudIconButton Icon="@Icons.Filled.ShoppingCart" Style="color: darkslategray" Href="/CartPage" />
+        </MudTooltip>
+
+    </MudAppBar>
+    <MudMainContent Style="margin-top:66px; margin-bottom:64px; padding:15px; height:calc(100vh - 130px); width:100vw;">
+        <!-- Margins must match header and footer heights and height must be calculated for all available area -->
+        @Body
+    </MudMainContent>
+    <MudAppBar Class="mud-elevation-0" Bottom="true" Style="background-color:lightgray;">
+        <MudText Typo="Typo.body2" Style="color: darkslategray">&copy; Part Picker Industries Ltd.</MudText>
+        <MudSpacer />
+
+        <MudTooltip Text="Show privacy policy" Placement="Placement.Top" Arrow="true">
+            <MudButton Href="/PrivacyStatement"><MudText Typo="Typo.body2" Style="color: darkslategray">Privacy policy</MudText></MudButton>
+        </MudTooltip>
+
+        <MudSpacer />
+        <MudText Typo="Typo.body2" Style="color: darkslategray">Follow us!</MudText>
+        <MudIconButton Icon="@Icons.Custom.Brands.Twitter" Style="color: darkslategray" />
+        <MudIconButton Icon="@Icons.Custom.Brands.Facebook" Style="color: darkslategray" />
+        <MudIconButton Icon="@Icons.Custom.Brands.Instagram" Style="color: darkslategray" />
+    </MudAppBar>
+
+</MudLayout>
+
+@code {
+
+}

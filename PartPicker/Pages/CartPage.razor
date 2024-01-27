@@ -1,0 +1,83 @@
+﻿@page "/CartPage"
+@inject NavigationManager Navigation
+@inject StateService.StateContainerService stateService;
+
+<style>
+    tr {
+        height: 48px;
+    }
+</style>
+
+
+<PageTitle>Cart</PageTitle>
+
+<div style="height:100%; overflow-x:hidden; overflow-y:auto;">
+    <div style="margin-left:30px; margin-top:20px;">
+        <MudText Typo="Typo.h3">Shopping Cart</MudText>
+
+        @if (!stateService.cart.CartList.Any())
+        {
+            <MudText Typo="Typo.h5" Style="margin-top:20px;">Cart is empty</MudText>
+        }
+        else
+        {
+            <MudText Style="margin-top:20px;">
+                <table>
+                    <colgroup>
+                        <col style="width:200px;" />
+                        <col style="width:110px;" />
+                        <col style="width:110px;" />
+                        <col style="width:25px;" />
+                        <col style="width:48px;" />
+                        <col style="width:30px;" />
+                        <col style="width:48px;" />
+                        <col style="width:48px;" />
+                    </colgroup>
+
+                    <tr>
+                        <th>Item</th>
+                        <th style="text-align:end;">Price</th>
+                        <th style="text-align:end;">Extended</th>
+                        <th>&nbsp;</th>
+                        <th>&nbsp;</th>
+                        <th style="text-align:center;">Qty</th>
+                        <th>&nbsp;</th>
+                        <th>&nbsp;</th>
+                    </tr>
+
+                    @foreach (CartItem item in stateService.cart.CartList)
+                    {
+                        <tr>
+                            <td>@item.Part.partName</td>
+                            <td style="text-align:end;">@item.Part.price.ToString("C")</td>
+                            <td style="text-align:end;">@item.ExtendedCost.ToString("C")</td>
+                            <td>&nbsp;</td>
+                            <td style="text-align:center;"><MudIconButton Icon="@Icons.Filled.RemoveCircleOutline" OnClick="() => item.decrementQuantity()" /></td>
+                            <td style="text-align:center;">@item.Quantity</td>
+                            <td style="text-align:center;"><MudIconButton Icon="@Icons.Filled.AddCircleOutline" OnClick="() => item.incrementQuantity()" /></td>
+                            <td style="text-align:center;"><MudIconButton Icon="@Icons.Filled.Delete" OnClick="() => stateService.cart.CartList.Remove(item)" /></td>
+                        </tr>
+                    }
+
+                    <tr><td>Subtotal </td> <td>&nbsp;</td> <td style="text-align:end; border-top:solid 1px black;">@stateService.cart.Subtotal.ToString("C")</td></tr>
+                    <tr><td>GST      </td> <td>&nbsp;</td> <td style="text-align:end;">@stateService.cart.GST.ToString("C")</td></tr>
+                    <tr><td>PST      </td> <td>&nbsp;</td> <td style="text-align:end;">@stateService.cart.PST.ToString("C")</td></tr>
+                    <tr><td>Total    </td> <td>&nbsp;</td> <td style="text-align:end; border-top:solid 2px black;">@stateService.cart.Total.ToString("C")</td></tr>
+                </table>
+            </MudText>
+
+            
+        }
+        <MudButton Style="margin-top:30px;" Variant="Variant.Filled" Disabled="@cartEmpty()" Href="/CheckoutPage">Checkout</MudButton>
+        
+    </div>
+</div>
+
+
+
+@code {
+    public bool cartEmpty()
+    {
+        return !stateService.cart.CartList.Any();
+    }
+}
